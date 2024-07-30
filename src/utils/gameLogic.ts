@@ -1,11 +1,11 @@
 import { Grid } from '~/types/game';
 
 export function createEmptyGrid(rows: number, cols: number): Grid {
-  return Array(rows).fill(null).map(() => Array(cols).fill(0));
+  return Array(rows).fill(null).map(() => Array(cols).fill(0)) as Grid;
 }
 
 export function randomizeGrid(grid: Grid): Grid {
-  return grid.map(row => row.map(() => Math.random() > 0.6 ? 1 : 0));
+  return grid.map(row => row.map(() => Math.random() > 0.6 ? 1 : 0)) as Grid;
 }
 
 export function isGridEmpty(grid: Grid): boolean {
@@ -86,5 +86,5 @@ export function nextGeneration(grid: Grid): Grid {
     }
   }
 
-  return newGrid;
+  return newGrid as Grid;
 }
