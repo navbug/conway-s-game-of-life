@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import GameGrid from "~/components/GameGrid";
 import GameControls from "~/components/GameControls";
-import { GameState, GameSettings } from "~/types/game";
+import { GameState, GameSettings, Grid, CellState } from "~/types/game";
 import { createEmptyGrid, randomizeGrid, nextGeneration, isGridEmpty } from "~/utils/gameLogic";
 
 const DEFAULT_SETTINGS: GameSettings = {
@@ -49,9 +49,13 @@ const GameOfLife: React.FC = () => {
 
   const handleCellClick = (x: number, y: number) => {
     setGameState((prevState) => {
-      const newGrid = [...prevState.grid];
-      newGrid[x] = [...newGrid[x]];
-      newGrid[x][y] = newGrid[x][y] ? 0 : 1;
+      const newGrid: Grid = prevState.grid.map((row, rowIndex) => 
+        rowIndex === x 
+          ? row.map((cell, colIndex) => 
+              colIndex === y ? (cell === 1 ? 0 : 1) : cell
+            )
+          : [...row]
+      );
       return { ...prevState, grid: newGrid };
     });
   };

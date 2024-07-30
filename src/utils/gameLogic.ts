@@ -13,7 +13,7 @@ export function isGridEmpty(grid: Grid): boolean {
 }
 
 export function countNeighbors(row: number, col: number, grid: Grid): number {
-  const directions = [
+  const directions: [number, number][] = [
     [-1, -1], [-1, 0], [-1, 1],
     [0, -1], [0, 1],
     [1, -1], [1, 0], [1, 1]
