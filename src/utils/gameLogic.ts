@@ -20,13 +20,18 @@ export function countNeighbors(row: number, col: number, grid: Grid): number {
   ];
 
   let count = 0;
+  const rowCount = grid.length;
+  const colCount = grid[0]?.length ?? 0;
+
   for (const [dx, dy] of directions) {
     const newRow = row + dx;
     const newCol = col + dy;
 
-    //Inbound check
-    if (newRow >= 0 && newRow < grid.length && newCol >= 0 && newCol < grid[0].length) {
-      count += grid[newRow][newCol] <= 0 ? 0 : 1;
+    if (newRow >= 0 && newRow < rowCount && newCol >= 0 && newCol < colCount) {
+      const cell = grid[newRow]?.[newCol];
+      if (cell !== undefined) {
+        count += cell <= 0 ? 0 : 1;
+      }
     }
   }
 
@@ -46,30 +51,40 @@ export function nextGeneration(grid: Grid): Grid {
       Finally, iterate over the matrix and for each cell apply the condition: cell value is equal to 2 change it to 0 or if cell value is equal to -3 change it to 1.
   */}
 
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[0].length; j++) {
+  const rowCount = grid.length;
+  const colCount = grid[0]?.length ?? 0;
+
+  const newGrid: Grid = grid.map(row => [...row]);
+
+  for (let i = 0; i < rowCount; i++) {
+    const row = newGrid[i];
+    if (!row) continue;
+
+    for (let j = 0; j < colCount; j++) {
       const liveNeighbors = countNeighbors(i, j, grid);
 
-      // Applying Game of Life rules
-      if (grid[i][j] === 1) {
+      if (row[j] === 1) {
         if (liveNeighbors < 2 || liveNeighbors > 3) {
-          grid[i][j] = 2;
+          row[j] = 2;
         }
-      } else if (liveNeighbors === 3) {
-        grid[i][j] = -3;
+      } else if (row[j] === 0 && liveNeighbors === 3) {
+        row[j] = -3;
       }
     }
   }
 
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[0].length; j++) {
-      if (grid[i][j] === -3) {
-        grid[i][j] = 1;
-      } else if (grid[i][j] === 2) {
-        grid[i][j] = 0;
+  for (let i = 0; i < rowCount; i++) {
+    const row = newGrid[i];
+    if (!row) continue;
+
+    for (let j = 0; j < colCount; j++) {
+      if (row[j] === -3) {
+        row[j] = 1;
+      } else if (row[j] === 2) {
+        row[j] = 0;
       }
     }
   }
 
-  return grid;
+  return newGrid;
 }
