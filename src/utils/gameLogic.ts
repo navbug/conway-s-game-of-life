@@ -1,7 +1,7 @@
 import { Grid } from '~/types/game';
 
 export function createEmptyGrid(rows: number, cols: number): Grid {
-  return Array(rows).fill(null).map(() => Array(cols).fill(0)) as Grid;
+  return Array.from({ length: rows }, () => Array(cols).fill(0)) as Grid;
 }
 
 export function randomizeGrid(grid: Grid): Grid {
